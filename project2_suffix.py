@@ -4,6 +4,7 @@
 #this stackoverflow websitre for appending dictinaries for creating s12 https://stackoverflow.com/questions/8930915/append-a-dictionary-to-a-dictionary
 # this website for how to edit dictionay values: https://www.tutorialspoint.com/How-to-replace-values-of-a-Python-dictionary
 #I will be basing my radix sort off of this: https://stackoverflow.com/questions/60968950/radix-sort-for-strings-in-python
+#time complexity table found here: https://wiki.python.org/moin/TimeComplexity
 import operator
 from collections import OrderedDict
 
@@ -13,31 +14,28 @@ def count_sort_letters(array, size, col, base, max_len): #https://stackoverflow.
   min_base = ord('a') - 1 # subtract one too allow for dummy character
 
   for item in array: # generate Counts
-    # get column letter if within string, else use dummy position of 0
     #print('here:', item[col][1])
 
-    #print('here 2 :', item[1][col])
+    #print('here 2 :', item[1][col]) #lots of print statements here for debugging haha
     #print(type(item[col][1]))
     #print(ord(item[1][col]))
     #print('min base: ', min_base)
     #letter = ord(item[col][1]) - min_base if col < len(item) else 0
-    letter = ord(item[1][col].lower()) - min_base
-    if letter < 0:
+    letter = ord(item[1][col].lower()) - min_base #keeping values within 0 and 26
+    if letter < 0: #we only go in here when the char we are looking at is not a letter like: $ or *
         letter = 0
-    #print(letter)
+    #print(letter) #more debug statements
     #print(letter)
     #print(len(count))
     count[letter] += 1
-    
-    #print(count)
 
   for i in range(len(count)-1):   # Accumulate counts
-      count[i + 1] += count[i]
+        count[i + 1] += count[i]
 
   for item in reversed(array):
     # Get index of current letter of item at index col in count array
-    letter = ord(item[1][col].lower()) - min_base #if col < len(item) else 0
-    if letter < 0:
+    letter = ord(item[1][col].lower()) - min_base #keep value under 26
+    if letter < 0: #check if it is not a alphbabet letter
         letter = 0
     output[count[letter] - 1] = item
     count[letter] -= 1
@@ -54,7 +52,7 @@ def radix_sort_letters(array, max_col = None):
 
   return array
 
-'''
+''' this attempt didnt work haha just just tried a differnt way which is shown above
 def sortFunc(arr, exp1):
     n = len(arr)
     output = [0] * n
@@ -96,7 +94,7 @@ def suffixArray(t):
     #based off of: https://gist.github.com/markormesher/59b990fba09972b4737e7ed66912e044
     len_t = len(t)
     #print('len_t: ', len_t)
-    solution = ''
+    solution = '' #ganna return this empty string at the end of the function and just print out the output as i go along in the last step
     
     s0 = {}
     s1 = {}
@@ -107,20 +105,20 @@ def suffixArray(t):
     
     i=0
     while i < len_t:
-        s0[i] = t[i:len_t]
+        s0[i] = t[i:len_t] #fill s0
         i = i + 3
     #print('s0: ', s0)
 
     i=1
     while i < len_t:
-        s1[i] = t[i:len_t]
+        s1[i] = t[i:len_t] #fill s1
         i = i + 3
     #print('s1: ', s1)
 
 
     i=2
     while i < len_t:
-        s2[i] = t[i:len_t]
+        s2[i] = t[i:len_t] #fill s2
         i = i + 3
     #print('s2: ', s2)
 
@@ -129,17 +127,18 @@ def suffixArray(t):
     s12 = {}
     s12 = dict(s1)
     s12.update(s2) #learned this using a website i linked at the top
+    #update runs within linear time so this works for this project. Check table linked above
     #print(s12)
     
     
     for keys, item in s12.items():
         #print(item)
-        if len(item) < 3:
+        if len(item) < 3: #append the star #may wanna make this a while loop tho
             item = item + '*'
             s12[keys] = item #learned this using a website i linked at the top
             
         elif len(item) > 3:
-            item = item[0:3]
+            item = item[0:3] #substrung the string 
             s12[keys] = item
 
     #print('s12 after edits: ', s12)
@@ -164,7 +163,7 @@ def suffixArray(t):
    
     print('sorted_dict', sorted_dict)
     '''    
-    
+    #this was my old way of sorting and it sorted in nlog(n)
     #sorted_tuples = sorted(s12_temp.items(), key=operator.itemgetter(1)) #https://stackoverflow.com/questions/18595686/how-do-operator-itemgetter-and-sort-work
     #print(sorted_tuples)
     #sorted_dict_s12 = OrderedDict()
